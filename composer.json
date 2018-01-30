@@ -1,0 +1,11 @@
+{
+    "name": "vendor/msisdn-decoder",
+    "description": "Description of project msisdn_decoder.",
+    "authors": [
+        {
+            "name": "Sony",
+            "email": "your@email.here"
+        }
+    ],
+    "require": {}
+}
