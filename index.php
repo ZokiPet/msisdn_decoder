@@ -14,11 +14,11 @@ and open the template in the editor.
     <body>
         <div id="container" class="px-5 py-5 pt-md-5 pb-md-4 mx-auto text-center" >
             <h1>MSISDN Decoder</h1>
-            <p class="lead px-2 py-2">Please insert valid MSISDN number and press button to decode...</p>
+            <p class="lead px-2 py-1">Please insert valid MSISDN number and press Decode button</p>
             
             <div class="input-group mx-auto text-center" style="max-width:300px;">
                 <!--<label for="msisdn">MSISDN:</label>--> 
-                <input id="msisdn" class="form-control" type="text" name="msisdn">
+                <input id="msisdn" class="form-control" placeholder="+49 89 353510" type="text" name="msisdn">
                 <div class="input-group-append">
                     <button type="button" id="msisdn_decode" class="btn btn-secondary">Decode</button>
                 </div>
@@ -27,10 +27,6 @@ and open the template in the editor.
                 
             </div>
         </div>
-        <?php
-        // put your code here
-        //echo "Debug test";
-        ?>
         
         <script>
             $("#msisdn").on('keyup', function (e) {
@@ -42,11 +38,21 @@ and open the template in the editor.
             
             $("#msisdn_decode").click(function() {
                 msisdn = $("input[id=msisdn]").val();
-            //alert("Msisdn: " + msisdn);
-            
-                
-                
-            })
+                alert("Msisdn: " + msisdn);
+                $.ajax({
+                    method: "GET",
+                    url: "http://localhost:8080/msisdn/ ... ajax handler ...",
+                    timeout: 4000,
+                    cache: false
+                }).done(function(result){
+                    alert("Done: " + result);
+                }).fail(function(jqXHR, textStatus){
+                    if(textStatus === 'timeout')
+			{     
+                            alert('No response !!!'); 
+			}
+                });
+            });
         </script>
        
     </body>
