@@ -39,6 +39,14 @@ and open the template in the editor.
                     alert('MSISDN:'+val);
                 }
             });
+            
+            $("#msisdn_decode").click(function() {
+                msisdn = $("input[id=msisdn]").val();
+            //alert("Msisdn: " + msisdn);
+            
+                
+                
+            })
         </script>
        
     </body>
