@@ -1,0 +1,44 @@
+[
+{
+    "country":"Macedonia",
+    "iso_2":"MK",
+    "cc":"389",
+    "operators": [
+      {"mnc":70,"operator":"T-Mobile Macedonia"},
+      {"mnc":71,"operator":"T-Mobile Macedonia"},
+      {"mnc":72,"operator":"T-Mobile Macedonia"},
+      {"mnc":75,"operator":"Cosmofon"},
+      {"mnc":76,"operator":"Cosmofon"},
+      {"mnc":77,"operator":"VIP Operator"},
+      {"mnc":78,"operator":"VIP Operator"}
+    ]
+ },
+ {
+    "country":"Serbia",
+    "iso_2":"SR",
+    "cc":"381",
+    "operators": [
+		{"mnc":60,"operator":"Vip mobile"},
+		{"mnc":61,"operator":"Vip mobile"},
+		{"mnc":62,"operator":"Telenor Serbia"},
+		{"mnc":63,"operator":"Telenor Serbia"},
+		{"mnc":64,"operator":"mt:s"},
+		{"mnc":65,"operator":"mt:s"},
+		{"mnc":66,"operator":"mt:s"},
+		{"mnc":69,"operator":"Telenor Serbia"}
+    ]
+ },
+ {
+    "country":"Bosnia and Herzegovina",
+    "iso_2":"BH",
+    "cc":"387",
+    "operators": [
+		{"mnc":61,"operator":"BH Mobile"},
+		{"mnc":62,"operator":"BH Mobile"},
+		{"mnc":63,"operator":"Eronet"},
+		{"mnc":64,"operator":"Hallo"},
+		{"mnc":65,"operator":"m:tel"},
+		{"mnc":66,"operator":"m:tel"}
+    ]
+ }
+] 

@@ -18,20 +18,19 @@ and open the template in the editor.
             <p class="lead px-2 py-1">Please insert valid MSISDN number and press Decode button</p>
             
             <div class="input-group mx-auto text-center" style="max-width:300px;">
-                <!--<label for="msisdn">MSISDN:</label>--> 
                 <input id="msisdn" class="form-control" placeholder="+49 89 353510" type="text" name="msisdn" value="38970123456">
                 <div class="input-group-append">
                     <button type="button" id="msisdn_decode" class="btn btn-secondary">Decode</button>
                 </div>
-                <!--<button id="msisdn_decode" class="lead btn btn-sm btn-outline-primary px-4" type="button">MSISDN Decode</button>--> 
-                <div id="result"></div>
-                
             </div>
+            <div id="result"  class="mt-5 col-7 mx-auto text-center">
+                <!--AJAX response goes here-->
+            </div>            
         </div>
         
         <script>
             $("#msisdn").on('keyup', function (e) {
-                val = $("#msisdn").val();
+                //val = $("#msisdn").val();
                 if (e.keyCode === 13) {
                     alert('MSISDN:'+val);
                 }
@@ -40,18 +39,48 @@ and open the template in the editor.
             $("#msisdn_decode").click(function() {
                 msisdn = $("input[id=msisdn]").val();
 //                alert("Msisdn: " + msisdn);
+                $( "div#result" ).html( "" );
                 $.ajax({
                     method: "GET",
-                    url: "http://localhost:8080/msisdn_decoder/lib/decoderHandler.php?call_func=decode_msisdn&msisdn="+msisdn,
+                    dataType: "json",
+                    contentType: "application/json",
+                    // Cross domain ajax call
+                    //url: "http://different.domain.com/test2/lib/ajaxHandler.php?call_func=decode_msisdn&msisdn="+msisdn,
+                    // Same domain ajax call
+                    url: "lib/ajaxHandler.php?call_func=decode_msisdn&msisdn="+msisdn,
                     timeout: 4000,
                     cache: false
                 }).done(function(result){
-                    alert(result);
+                    //alert(result);
+                    html_result="";
+                    $.each(result, function(key, value){
+                        html_result += '<div class="row pb-1"\n>';
+                        html_result += '<div class="bg-light col-5">'+key+'</div>\n';
+                        html_result += '<div class="bg-info text-white col-7">'+value+'</div>\n';
+                        html_result += '</div>';
+                    });
+                    $("div#result").html(html_result);
                 }).fail(function(jqXHR, textStatus){
-                    if(textStatus === 'timeout')
-			{     
-                            alert('No response !!!'); 
-			}
+                    var msg = '';
+                    if (jqXHR.status === 0) {
+                        msg = 'Not connected.\n Verify Your Connection.';
+                    } else if (jqXHR.status === 404) {
+                        msg = 'Requested page not found. [404]';
+                    } else if (jqXHR.status === 500) {
+                        msg = 'Internal Server Error [500].';
+                    } else if (textStatus === 'parsererror') {
+                        msg = 'Requested JSON parse failed.';
+                    } else if (textStatus === 'timeout') {
+                        msg = 'Time out error.';
+                    } else if (textStatus === 'abort') {
+                        msg = 'Ajax request aborted.';
+                    } else {
+                        msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                    }
+                    //msg += '<div class="bg-danger text-white col-4">'+msg+'</div>';
+                    //html_result += '<div class="bg-danger text-white col-4">'+value+'</div>\n';
+                    //html_result += '</div>';
+                    $('div#result').html('<div class="px-1 py-2 bg-danger text-white">'+msg+'</div>');
                 });
             });
         </script>
