@@ -3,9 +3,12 @@
     "description": "Description of project msisdn_decoder.",
     "authors": [
         {
-            "name": "Sony",
-            "email": "your@email.here"
+            "name": "ZokiPet",
+            "email": "zokipet@hotmail.com"
         }
     ],
-    "require": {}
+    "require": {},
+    "require-dev": {
+        "phpunit/phpunit-skeleton-generator": "2.0.1"
+    }
 }
