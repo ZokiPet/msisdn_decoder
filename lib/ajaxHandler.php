@@ -9,23 +9,14 @@
 require_once('classMsisdnDecoder.php');
 
 $get_func = filter_input(INPUT_GET, 'call_func');
-//$get_param = filter_input(INPUT_GET, 'msisdn');
-//if (isset( $_GET['call_func']) and isset( $_GET['msisdn'])) {
-    //if ($_GET['call_func'] === 'decode_msisdn') {
-    if ($get_func === 'decode_msisdn') {
-        //$msisdn = $_GET['msisdn'];
-        $msisdn = filter_input(INPUT_GET, 'msisdn');
-        //echo "decode_msisdn " . $msisdn;
+if ($get_func === 'decode_msisdn') {
+    $msisdn = filter_input(INPUT_GET, 'msisdn');
 
-        $msisdnToDecode = new msisdnDecoder($msisdn);
-        $decoding_response = $msisdnToDecode->decode_msisdn_number();
-        
-        //header('Content-Type: application/json');
-        // Header option that allows cross domain AJAX requests fron ANY domain
-        //header('Access-Control-Allow-Origin: *');
-        echo json_encode($decoding_response); 
+    $msisdnToDecode = new msisdnDecoder($msisdn);
+    $decoding_response = $msisdnToDecode->decode_msisdn_number();
 
-    }
-//}
-            
-?>
+    // Header option that allows cross domain AJAX requests fron ANY domain
+    //header('Access-Control-Allow-Origin: *');
+
+    echo json_encode($decoding_response); 
+}

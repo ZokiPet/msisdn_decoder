@@ -22,6 +22,9 @@ class msisdnDecoder {
     const STATUS_MNO_CODE_INVALID_MISSING = "0";
     const STATUS_MSISDN_NUMBER_DECODED = "1";
     
+    const MSISDN_JSON_DATA_FILE_URI = '../data/msisdn_data.json';
+
+
     
     public function __construct($msisdn) {
         $this->msisdn_number = $msisdn;
@@ -34,11 +37,19 @@ class msisdnDecoder {
     public function get_msisdn_number() {
         return $this->msisdn_number;
     }
+    
+    private function error_handler($errno, $errstr) { 
+        
+        $response =['Status' => 'Unexpected error in data processing!',
+                    $errno => $errstr];
+        exit(json_encode($response));
+    }
 
-    private function get_data_from_json_file($json_url) {
+    private function get_data_from_json_file($json_uri) {
+        
         /* @var $json_url type string*/
-        if (is_file($json_url)) {
-            $json = json_decode(file_get_contents($json_url));
+        if (is_file($json_uri)) {
+            $json = json_decode(file_get_contents($json_uri));
             if (json_last_error() === JSON_ERROR_NONE) { 
                 return $json;
             }
@@ -99,6 +110,7 @@ class msisdnDecoder {
 
     public function decode_msisdn_number() {
 
+        set_error_handler([$this, 'error_handler'], E_ALL);
         /**
          * @var $clean_msisdn type string
          */
@@ -109,7 +121,7 @@ class msisdnDecoder {
             /**
              * @var $msisdn_data type array
              */
-            $msisdn_data = $this->get_data_from_json_file('../data/msisdn_data.json');
+            $msisdn_data = $this->get_data_from_json_file(self::MSISDN_JSON_DATA_FILE_URI);
             $response_code = self::STATUS_JSON_FILE_MISSING_INVALID;
             if (is_array($msisdn_data)) {
                 $response_code = self::STATUS_CC_CODE_INVALID_MISSING;
@@ -124,7 +136,7 @@ class msisdnDecoder {
                         $this->countryIsoCode = $countries->iso_2;
                         $this->countryName = $countries->country;
                         $response_code = self::STATUS_MNO_CODE_INVALID_MISSING;
-                        
+                    
                         foreach ($countries->operators as $operator) {
                             $match = "/^".$this->countryDialingCode.$operator->mnc."/";
                             if (preg_match($match, $clean_msisdn)) {
@@ -140,6 +152,7 @@ class msisdnDecoder {
                 } 
             } 
         }
+        restore_error_handler();
         // return status of decoding process
         return $this->prepare_response($response_code);
     }   
