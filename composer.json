@@ -9,6 +9,8 @@
     ],
     "require": {},
     "require-dev": {
-        "phpunit/phpunit-skeleton-generator": "2.0.1"
+        "phpunit/phpunit-skeleton-generator": "2.0.x-dev",
+        "phpunit/phpunit": "4.0.x-dev"
     }
+    
 }

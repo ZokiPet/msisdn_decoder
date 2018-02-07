@@ -38,7 +38,7 @@ class msisdnDecoder {
         return $this->msisdn_number;
     }
     
-    private function error_handler($errno, $errstr) { 
+    private function decoder_error_handler($errno, $errstr) { 
         
         $response =['Status' => 'Unexpected error in data processing!',
                     $errno => $errstr];
@@ -61,7 +61,7 @@ class msisdnDecoder {
         }
     }
     
-    private function clean_msisdn_number_input($input_number) {
+    function clean_msisdn_number_input($input_number) {
         
         $clean_nr = preg_replace("/[^0-9]/", "", $input_number);
         $clean_nr = preg_replace("/(^00)/", "", $clean_nr);
@@ -74,35 +74,35 @@ class msisdnDecoder {
         }
     }
     
-    private function prepare_response($response_code) {
+    public function prepare_response($response_code) {
 
         if ($response_code == '1') {
-            $response =["countryName" => $this->countryName,
-                        "countryIsoCode" => $this->countryIsoCode,
-                        "countryDialingCode" => $this->countryDialingCode,
-                        "mnoNumber" => $this->mnoNumber,
-                        "subscriberNumber" => $this->subscriberNumber,
-                        "Operator Name" => $this->mnoName,
-                        "Decode Status" => '1',
-                        "Decode Description" => 'MSISDN number decoded.'];
+            $response =["Country" => $this->countryName,
+                        "ISO Code" => $this->countryIsoCode,
+                        "CC" => $this->countryDialingCode,
+                        "MNC" => $this->mnoNumber,
+                        "SN" => $this->subscriberNumber,
+                        "MNO" => $this->mnoName,
+                        "Decoding Status" => '1',
+                        "Decoding Description" => 'MSISDN number decoded.'];
         } elseif ($response_code == '0') {
-            $response =["countryName" => $this->countryName,
-                        "countryIsoCode" => $this->countryIsoCode,
-                        "countryDialingCode" => $this->countryDialingCode,
-                        "mnoNumber" => $this->mnoNumber,
-                        "subscriberNumber" => $this->subscriberNumber,
-                        "Operator Name" => $this->mnoName,
-                        "Decode Status" => '0',
-                        "Decode Description" => 'MSISDN number partialy decoded.<br>MNO is invalid/not in database.'];
+            $response =["Country" => $this->countryName,
+                        "ISO Code" => $this->countryIsoCode,
+                        "CC" => $this->countryDialingCode,
+                        "MNC" => $this->mnoNumber,
+                        "MNO" => $this->subscriberNumber,
+                        "MNO" => $this->mnoName,
+                        "Decoding Status" => '0',
+                        "Decoding Description" => 'MSISDN number partialy decoded.<br>MNO is invalid/not in database.'];
         } elseif ($response_code == '-1') {
-            $response =["Decode Status" => '-1',
-                        "Decode Description" => 'MSISDN number decoding failed.<br>CC code is invalid/not in database'];            
+            $response =["Decoding Status" => '-1',
+                        "Decoding Description" => 'MSISDN number decoding failed.<br>CC code is invalid/not in database'];            
         } elseif ($response_code == '-7') {
-            $response =["Success" => '-1',
-                        "Last error" => 'File is missing or JSON data invalid!'];
+            $response =["Decoding Status" => '-7',
+                        "Decoding Description" => 'File is missing or JSON data invalid!'];
         } elseif ($response_code == '-9') {
-            $response =["Success" => '-1',
-                        "Last error" => 'MSISDN number too short!<br>Please enter valid MSISDN number with 7-15 digits.'];            
+            $response =["Decoding Status" => '-9',
+                        "Decoding Description" => 'MSISDN number too short!<br>Please enter valid MSISDN number with 7-15 digits.'];            
         }
         
         return $response;
@@ -110,7 +110,7 @@ class msisdnDecoder {
 
     public function decode_msisdn_number() {
 
-        set_error_handler([$this, 'error_handler'], E_ALL);
+        set_error_handler([$this, 'decoder_error_handler'], E_ALL);
         /**
          * @var $clean_msisdn type string
          */
@@ -155,5 +155,6 @@ class msisdnDecoder {
         restore_error_handler();
         // return status of decoding process
         return $this->prepare_response($response_code);
+        //return $response_code;
     }   
 }
