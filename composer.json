@@ -7,7 +7,9 @@
             "email": "zokipet@hotmail.com"
         }
     ],
-    "require": {},
+    "require": {
+        "jsonrpc/jsonrpc": "v1.0.3"
+    },
     "require-dev": {
         "phpunit/phpunit-skeleton-generator": "2.0.x-dev",
         "phpunit/phpunit": "4.0.x-dev"

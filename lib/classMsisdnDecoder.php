@@ -22,7 +22,7 @@ class msisdnDecoder {
     const STATUS_MNO_CODE_INVALID_MISSING = "0";
     const STATUS_MSISDN_NUMBER_DECODED = "1";
     
-    const MSISDN_JSON_DATA_FILE_URI = '../data/msisdn_data.json';
+    const MSISDN_JSON_DATA_FILE_URI = 'data/msisdn_data.json';
 
 
     
@@ -99,7 +99,7 @@ class msisdnDecoder {
                         "Decoding Description" => 'MSISDN number decoding failed.<br>CC code is invalid/not in database'];            
         } elseif ($response_code == '-7') {
             $response =["Decoding Status" => '-7',
-                        "Decoding Description" => 'File is missing or JSON data invalid!'];
+                        "Decoding Description" => 'File is missing or JSON data invalid!'.dirname(__FILE__)];
         } elseif ($response_code == '-9') {
             $response =["Decoding Status" => '-9',
                         "Decoding Description" => 'MSISDN number too short!<br>Please enter valid MSISDN number with 7-15 digits.'];            
