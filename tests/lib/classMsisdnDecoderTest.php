@@ -26,30 +26,6 @@
 require_once('../lib/classMsisdnDecoder.php');
 
 class classMsisdnDecoderTest extends PHPUnit_Framework_TestCase {
-
-    /**
-     * @var \RemoteWebDriver
-     */
-
-/*    protected $webDriver;
-
-    public function setUp() {
-        $capabilities = array(\WebDriverCapabilityType::BROWSER_NAME => 'firefox');
-        $this->webDriver = RemoteWebDriver::create('http://localhost:4444/wd/hub', $capabilities);
-    }
-
-    public function tearDown() {
-        $this->webDriver->close();
-    }
-
-    protected $url = 'http://www.netbeans.org/';
-
-    public function testSimple() {
-        $this->webDriver->get($this->url);
-        // checking that page title contains word 'NetBeans'
-        $this->assertContains('NetBeans', $this->webDriver->getTitle());
-    }   
-*/
   
     public function testThatWeCanConstructMsisdn() {
         $testMsisdn = new msisdnDecoder('49151123456');
@@ -80,25 +56,60 @@ class classMsisdnDecoderTest extends PHPUnit_Framework_TestCase {
     public function testThatWeCanDecodeMsisdnNumber() {
         $testMsisdn = new msisdnDecoder('49151123456');
         $MsisdnDecodingArray = $testMsisdn->decode_msisdn_number();
-        //print_r($MsisdnDecodingArray);
         
         $this->assertArrayHasKey('Country', $MsisdnDecodingArray);
-        $this->assertArrayHasKey('ISO Code', $MsisdnDecodingArray);
+        $this->assertArrayHasKey('ISO', $MsisdnDecodingArray);
         $this->assertArrayHasKey('CC', $MsisdnDecodingArray);
         $this->assertArrayHasKey('MNC', $MsisdnDecodingArray);
         $this->assertArrayHasKey('SN', $MsisdnDecodingArray);
         $this->assertArrayHasKey('MNO', $MsisdnDecodingArray);
-        $this->assertArrayHasKey('Decoding Status', $MsisdnDecodingArray);
-        $this->assertArrayHasKey('Decoding Description', $MsisdnDecodingArray);
+        $this->assertArrayHasKey('Status', $MsisdnDecodingArray);
+        $this->assertArrayHasKey('Message', $MsisdnDecodingArray);
         
         $this->assertEquals($MsisdnDecodingArray['Country'], 'Germany');
-        $this->assertEquals($MsisdnDecodingArray['ISO Code'], 'DE');
+        $this->assertEquals($MsisdnDecodingArray['ISO'], 'DE');
         $this->assertEquals($MsisdnDecodingArray['CC'], '49');
         $this->assertEquals($MsisdnDecodingArray['MNC'], '151');
         $this->assertEquals($MsisdnDecodingArray['MNO'], 'T-Mobile (GSM/UMTS)');
         $this->assertEquals($MsisdnDecodingArray['SN'], '123456');
-        $this->assertEquals($MsisdnDecodingArray['Decoding Status'], '1');
-        $this->assertEquals($MsisdnDecodingArray['Decoding Description'], 'MSISDN number decoded.');
+        $this->assertEquals($MsisdnDecodingArray['Status'], '1');
+        $this->assertEquals($MsisdnDecodingArray['Message'], 'MSISDN number decoded.');
+        
+    }
+    
+        public function testThatMsisdnNumberIsInvalid() {
+        $testMsisdn = new msisdnDecoder('49151');
+        $MsisdnDecodingArray = $testMsisdn->decode_msisdn_number();
+        
+        $this->assertArrayHasKey('Status', $MsisdnDecodingArray);
+        $this->assertArrayHasKey('Message', $MsisdnDecodingArray);
+        
+        $this->assertEquals($MsisdnDecodingArray['Status'], '-9');
+        $this->assertEquals($MsisdnDecodingArray['Message'], 'MSISDN number too short! Please enter valid MSISDN number with 7-15 digits.');
+        
+    }
+    
+    public function testThatMsisdnNumberHasIsInvalidCountryCode() {
+        $testMsisdn = new msisdnDecoder('38811222222');
+        $MsisdnDecodingArray = $testMsisdn->decode_msisdn_number();
+        
+        $this->assertArrayHasKey('Status', $MsisdnDecodingArray);
+        $this->assertArrayHasKey('Message', $MsisdnDecodingArray);
+        
+        $this->assertEquals($MsisdnDecodingArray['Status'], '-1');
+        $this->assertEquals($MsisdnDecodingArray['Message'], 'MSISDN number decoding failed. CC code is invalid/not in database.');
+        
+    }
+
+    public function testThatMsisdnNumberHasIsInvalidMobileNetworkCode() {
+        $testMsisdn = new msisdnDecoder('38988123456');
+        $MsisdnDecodingArray = $testMsisdn->decode_msisdn_number();
+        
+        $this->assertArrayHasKey('Status', $MsisdnDecodingArray);
+        $this->assertArrayHasKey('Message', $MsisdnDecodingArray);
+        
+        $this->assertEquals($MsisdnDecodingArray['Status'], '0');
+        $this->assertEquals($MsisdnDecodingArray['Message'], 'MSISDN number partialy decoded. MNC is invalid/not in database.');
         
     }
 }

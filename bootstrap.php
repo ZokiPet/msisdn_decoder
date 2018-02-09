@@ -3,27 +3,23 @@
 spl_autoload_register('autoload');
 require 'vendor/autoload.php';
 
-function autoload($className)
-{
+function autoload($className) {
 
-  $className = ltrim($className, '\\');
-  $fileName  = '';
-  $namespace = '';
+    $className = ltrim($className, '\\');
+    $fileName = '';
+    $namespace = '';
 
-  if ($lastNsPos = strripos($className, '\\'))
-  {
-    $namespace = substr($className, 0, $lastNsPos);
-    $className = substr($className, $lastNsPos + 1);
-    $fileName  = str_replace('\\', DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR;
-  }
+    if ($lastNsPos = strripos($className, '\\')) {
+        $namespace = substr($className, 0, $lastNsPos);
+        $className = substr($className, $lastNsPos + 1);
+        $fileName = str_replace('\\', DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR;
+    }
 
-  $fileName .= $className . '.php';
+    $fileName .= $className . '.php';
 
-  // set the path to our source directory, relative to the directory we are in
-  //$src = realpath('..' . DIRECTORY_SEPARATOR . 'src');
-  $src = realpath('..' . DIRECTORY_SEPARATOR . 'src');
+    // set the path to our source directory, relative to the directory we are in
+    //$src = realpath('..' . DIRECTORY_SEPARATOR . 'src');
+    $src = realpath('..' . DIRECTORY_SEPARATOR . 'src');
 
-  require $src . DIRECTORY_SEPARATOR . $fileName;
-
+    require $src . DIRECTORY_SEPARATOR . $fileName;
 }
-

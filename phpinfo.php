@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<!DOCTYPE html>
 <!--
 Copyright (C) 2018 Sony
 
@@ -15,19 +15,14 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-
-<!-- see http://www.phpunit.de/wiki/Documentation -->
-<phpunit
-         bootstrap="..\vendor\autoload.php"
-         cacheTokens="false"
-         colors="true"
-         stopOnError="false"
-         stopOnFailure="false"
-         stopOnIncomplete="false"
-         stopOnSkipped="false"
-         stopOnRisky="false"
-         timeoutForSmallTests="1"
-         timeoutForMediumTests="10"
-         timeoutForLargeTests="60"
-         verbose="true">
-</phpunit>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+    </head>
+    <body>
+        <?php
+            phpinfo();
+        ?>
+    </body>
+</html>

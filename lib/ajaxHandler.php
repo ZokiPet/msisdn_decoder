@@ -6,17 +6,20 @@
  * and open the template in the editor.
  */
 
-require_once('classMsisdnDecoder.php');
+require_once 'classMsisdnDecoder.php';
 
-$get_func = filter_input(INPUT_GET, 'call_func');
-if ($get_func === 'decode_msisdn') {
-    $msisdn = filter_input(INPUT_GET, 'msisdn');
+ if(isset($_POST['call_func'])){
+    $post_func = filter_input(INPUT_POST, 'call_func'); 
+    if ($post_func === 'decode_msisdn') {
 
-    $msisdnToDecode = new msisdnDecoder($msisdn);
-    $decoding_response = $msisdnToDecode->decode_msisdn_number();
+        $msisdn = filter_input(INPUT_POST, 'msisdn');
 
-    // Header option that allows cross domain AJAX requests fron ANY domain
-    //header('Access-Control-Allow-Origin: *');
+        $msisdnToDecode = new msisdnDecoder($msisdn);
+        $decoding_response = $msisdnToDecode->decode_msisdn_number();
 
-    echo json_encode($decoding_response); 
-}
+        // Header option that allows cross domain AJAX requests fron ANY domain
+        header('Access-Control-Allow-Origin: *');
+
+        echo json_encode($decoding_response); 
+    }
+}        

@@ -1,6 +1,10 @@
 {
-    "name": "vendor/msisdn-decoder",
-    "description": "Description of project msisdn_decoder.",
+    "name": "zokipet/msisdn-decoder",
+	"type": "project",
+    "description": "Sample project for decoding MSISDN numbers. After successful decode Country name, country ISO code, CC, MNC, MNO and SN are returned.",
+	"keywords": ["msisdn", "msisdn decoder", "decoder"],
+	"homepage": "https://github.com/ZokiPet/msisdn_decoder",
+	"license": "MIT",
     "authors": [
         {
             "name": "ZokiPet",
