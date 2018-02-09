@@ -8,7 +8,11 @@
 
 class msisdnDecoder {
 
+    /**
+     * @var string Stores the MSISDN input value
+     */
     public $msisdn_number;
+    
     private $countryName = '';
     private $countryIsoCode = '';
     private $countryDialingCode = '';
@@ -22,9 +26,10 @@ class msisdnDecoder {
     const STATUS_MNO_CODE_INVALID_MISSING = "0";
     const STATUS_MSISDN_NUMBER_DECODED = "1";
     
-    const MSISDN_JSON_DATA_FILE_URI = 'data/msisdn_data.json';
-
-
+    /** @var const MSISDN_JSON_DATA_FILE_URI - Relative path to msisdn_data.json file */
+    //const MSISDN_JSON_DATA_FILE_URI = __DIR__ . '/data/msisdn_data.json';
+    const MSISDN_JSON_DATA_FILE_URI = '/data/msisdn_data.json';
+    
     
     public function __construct($msisdn) {
         $this->msisdn_number = $msisdn;
@@ -38,6 +43,16 @@ class msisdnDecoder {
         return $this->msisdn_number;
     }
     
+    /**
+     * Handling unexpected errors
+     * Custom decoder error handler method that intercepts all unexpected error during MSIDN number decoding 
+     * and returns an associative array with info regarding the error.
+     * 
+     * @param int $errno
+     * @param string $errstr
+     * 
+     * #return array Returns an associative array with description of error.
+     */
     private function decoder_error_handler($errno, $errstr) { 
         
         $response =['Status' => 'Unexpected error in data processing!',
@@ -45,9 +60,19 @@ class msisdnDecoder {
         exit(json_encode($response));
     }
 
+    /** 
+     * Get data from JSON file and return JSON decoded array
+     * 
+     * Check if file exist, then loads it 
+     * If the data is valid JSON, returns array otherwise return false
+     * 
+     * @param string $json_uri Relative path to json file to load
+     * 
+     * @return array An array of JSON decoded data 
+     */
     private function get_data_from_json_file($json_uri) {
-        
-        /* @var $json_url type string*/
+
+        $json_uri = __DIR__ . $json_uri; 
         if (is_file($json_uri)) {
             $json = json_decode(file_get_contents($json_uri));
             if (json_last_error() === JSON_ERROR_NONE) { 
@@ -61,53 +86,82 @@ class msisdnDecoder {
         }
     }
     
+    /**
+     * Cleaning input MSISDN string
+     * In the first step removes all non-numeric characters from input parameter<br/>
+     * In the second step removes leading double-zeros from MSISDN string
+     * 
+     * @param string $input_number A raw MSISDN number 
+     * @return string If cleaned number is consisting of digit otherwise return False
+     */
     function clean_msisdn_number_input($input_number) {
         
-        $clean_nr = preg_replace("/[^0-9]/", "", $input_number);
-        $clean_nr = preg_replace("/(^00)/", "", $clean_nr);
+        $clean_nr = preg_replace("/[^0-9]/", "", $input_number); // Clean all non digit chars from input string
+        $clean_nr = preg_replace("/(^00)/", "", $clean_nr); // Clean leading double-zeros '00' if any, at the begining of the string
         if (ctype_digit($clean_nr)) {
-            return $clean_nr;
+            return $clean_nr;   // If all characters in the $clean_nr string are numerical return cleaned string
         }
         else
         {
-            return false;
+            return false;   // otherwise return false
         }
     }
     
+    /**
+     * Return array with decoded data or error info
+     * After succesful decoding array with Country, ISO code, CC, MNC, SN and MNO 
+     * is returned with Status code of '1' and message for success.
+     * 
+     * Otherwise Status code <1 is returned with Message describing the error of decoding process.
+     * 
+     * @param string $response_code
+     * @return array Returns associative array with decoded data and decoding status
+     */
     public function prepare_response($response_code) {
 
         if ($response_code == '1') {
             $response =["Country" => $this->countryName,
-                        "ISO Code" => $this->countryIsoCode,
+                        "ISO" => $this->countryIsoCode,
                         "CC" => $this->countryDialingCode,
-                        "MNC" => $this->mnoNumber,
+                        //"MNC" => $this->mnoNumber,
                         "SN" => $this->subscriberNumber,
                         "MNO" => $this->mnoName,
-                        "Decoding Status" => '1',
-                        "Decoding Description" => 'MSISDN number decoded.'];
+                        "Status" => '1',
+                        "Message" => 'MSISDN number decoded.'];
         } elseif ($response_code == '0') {
             $response =["Country" => $this->countryName,
-                        "ISO Code" => $this->countryIsoCode,
+                        "ISO" => $this->countryIsoCode,
                         "CC" => $this->countryDialingCode,
-                        "MNC" => $this->mnoNumber,
-                        "MNO" => $this->subscriberNumber,
+                        //"MNC" => $this->mnoNumber,
+                        "SN" => $this->subscriberNumber,
                         "MNO" => $this->mnoName,
-                        "Decoding Status" => '0',
-                        "Decoding Description" => 'MSISDN number partialy decoded.<br>MNO is invalid/not in database.'];
+                        "Status" => '0',
+                        "Message" => 'MSISDN number partialy decoded. MNC is invalid/not in database.'];
         } elseif ($response_code == '-1') {
-            $response =["Decoding Status" => '-1',
-                        "Decoding Description" => 'MSISDN number decoding failed.<br>CC code is invalid/not in database'];            
+            $response =["Status" => '-1',
+                        "Message" => 'MSISDN number decoding failed. CC code is invalid/not in database.'];            
         } elseif ($response_code == '-7') {
-            $response =["Decoding Status" => '-7',
-                        "Decoding Description" => 'File is missing or JSON data invalid!'.dirname(__FILE__)];
+            $response =["Status" => '-7',
+                        "Message" => 'File is missing or JSON data invalid!'];
         } elseif ($response_code == '-9') {
-            $response =["Decoding Status" => '-9',
-                        "Decoding Description" => 'MSISDN number too short!<br>Please enter valid MSISDN number with 7-15 digits.'];            
+            $response =["Status" => '-9',
+                        "Message" => 'MSISDN number too short! Please enter valid MSISDN number with 7-15 digits.'];            
         }
         
         return $response;
     }
 
+    /**
+     * Decoding MSISDN number
+     * 
+     * Method try to decode MSISDN from value stored in $msisdn_number by matching CC and MNC data 
+     * from associative array loaded from JSON file. 
+     * 
+     * Result from decoding process is returned in associative array 
+     * 
+     *  
+     * @return array Returns associative array with decoded data and decoding status
+     */
     public function decode_msisdn_number() {
 
         set_error_handler([$this, 'decoder_error_handler'], E_ALL);
@@ -139,10 +193,16 @@ class msisdnDecoder {
                     
                         foreach ($countries->operators as $operator) {
                             $match = "/^".$this->countryDialingCode.$operator->mnc."/";
+                            //$match = "/^".$this->countryDialingCode."/";
                             if (preg_match($match, $clean_msisdn)) {
                                 $this->mnoName = $operator->operator;
-                                $this->mnoNumber = $operator->mnc;
-                                $this->subscriberNumber = preg_replace($match, "", $clean_msisdn);
+                                //$this->mnoNumber = $operator->mnc;
+                                //filtering MSISDN from CountryCode and MNC to get subscriberNumber
+                                //$this->subscriberNumber = preg_replace($match, "", $clean_msisdn);
+                                
+                                //=== filtering MSISDN from only CountryCode to get subscriberNumber
+                                $sn_match = "/^".$this->countryDialingCode."/";
+                                $this->subscriberNumber = preg_replace($sn_match, "", $clean_msisdn);
                                 
                                 $response_code = self::STATUS_MSISDN_NUMBER_DECODED;
                                 break;

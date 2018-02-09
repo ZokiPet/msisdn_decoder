@@ -17,14 +17,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
 <!-- see http://www.phpunit.de/wiki/Documentation -->
-<!--phpunit bootstrap="/path/to/bootstrap.php"
-         colors="false"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
-         stopOnFailure="true">
-</phpunit-->
-
 <phpunit
          bootstrap="..\vendor\autoload.php"
          cacheTokens="false"

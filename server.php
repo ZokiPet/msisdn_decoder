@@ -4,11 +4,11 @@
   ini_set('default_charset', 'UTF-8');
 
   # we don't want any PHP errors being output
-  //ini_set('display_errors', '0');
+  ini_set('display_errors', '0');
 
   # so we will log them. Exceptions will be logged as well
-  //ini_set('log_errors', '1');
-  //ini_set('error_log', 'server-errors.log');
+  ini_set('log_errors', '1');
+  ini_set('error_log', 'server-errors.log');
 
   # bootstrap for the example directory
   require('vendor/autoload.php');
