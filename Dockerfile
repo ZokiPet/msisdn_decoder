@@ -1,1 +1,1 @@
-FROM zokipet/msisdn_decoder
+FROM php:7.0-apache
