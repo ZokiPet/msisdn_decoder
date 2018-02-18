@@ -1,1 +1,1 @@
-FROM zokipet
+FROM zokipet/msisdn_decoder
