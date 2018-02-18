@@ -12,6 +12,7 @@
         }
     ],
     "require": {
+        "php": "^7.0",
         "jsonrpc/jsonrpc": "v1.0.3"
     },
     "require-dev": {
