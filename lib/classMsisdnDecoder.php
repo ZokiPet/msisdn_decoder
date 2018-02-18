@@ -185,6 +185,7 @@ class msisdnDecoder {
                         // Loop for matched CC and each MNC code in array to match with the input MSISDN nr.
                         foreach ($countries->operators as $operator) {  
                             $match = "/^".$this->countryDialingCode.$operator->mnc."/";
+                            //$match = "/^".$this->countryDialingCode."/";
                             if (preg_match($match, $clean_msisdn)) {
                                 // Loop doesn't break on first match, continues to look for matches with longer pattern
                                 // for ex. Country: Turkey

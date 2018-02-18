@@ -15161,7 +15161,8 @@
 	{"mnc": "75", "operator": "Cosmofon"},
 	{"mnc": "76", "operator": "Cosmofon"},
 	{"mnc": "77", "operator": "VIP Operator"},
-	{"mnc": "78", "operator": "VIP Operator"}
+        {"mnc": "78", "operator": "VIP Operator"},
+	{"mnc": "79", "operator": "Lycamobile"}
 ]
  },
  {
