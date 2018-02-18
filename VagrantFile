@@ -15,7 +15,7 @@ Vagrant.configure("2") do |config|
   # config.vm.synced_folder "./www", "/var/www/", :owner=> 'www-data', :group=>'root'
 
   config.vm.provider "virtualbox" do |vb|
-    vb.memory = "1024"
+    vb.memory = "512"
     vb.cpus = 1
   end
 
