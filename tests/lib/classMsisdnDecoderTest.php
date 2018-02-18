@@ -72,7 +72,6 @@ class classMsisdnDecoderTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals($MsisdnDecodingArray['MNC'], '151');
         $this->assertEquals($MsisdnDecodingArray['MNO'], 'T-Mobile (GSM/UMTS)');
         $this->assertEquals($MsisdnDecodingArray['SN'], '123456');
-        $this->assertEquals($MsisdnDecodingArray['SN'], '151123456');
         $this->assertEquals($MsisdnDecodingArray['Status'], '1');
         $this->assertEquals($MsisdnDecodingArray['Message'], 'MSISDN number decoded.');
         
