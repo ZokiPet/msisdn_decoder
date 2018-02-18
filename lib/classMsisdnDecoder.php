@@ -191,7 +191,7 @@ class msisdnDecoder {
                                 // for ex. Country: Turkey
                                 // {"mnc": "54", "operator": "Vodafone"},
                                 // {"mnc": "54285", "operator": "KKTC Telsim"},
-                                // if msisdn -> 9054285123456 loop first will match Vodafone but will continue and find the final match for KKTC Telsim with MNC: 54285
+                                // if msisdn -> 9054285123456 loop first will match Vodafone (mnc:54) but will continue and find the final match for KKTC Telsim (mnc:54285)
                                 if (strlen($operator->mnc) > strlen($this->mnoNumber)) {  // If already matched, but current MNO lengthy than previously matched MNO, use current lengthy match
                                     $this->mnoName = $operator->operator;
                                     $this->mnoNumber = $operator->mnc;
